@@ -42,7 +42,7 @@ Vars
     Numeric LowestExitPrice;            //最低离市价格
     Numeric HighestExitPrice;           //最高离市价格
     Numeric myEntryPrice;               // 开仓价格
-    Numeric PreEntryPrice;              // 前一次开仓的价格
+    NumericSeries PreEntryPrice;        // 前一次开仓的价格
     Numeric myExitPrice;                // 平仓价格
     Bool TradeThisBar(False);           // 当前Bar是否有过交易
 
