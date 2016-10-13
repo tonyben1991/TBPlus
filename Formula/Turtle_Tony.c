@@ -1,4 +1,4 @@
-/****************************************************************************************
+﻿/*******************************************************************************
             > 文件: Turtle_Tony  海龟交易系统
             > 作者: Tony Ben
             > 电子邮箱: tonyben1991@outlook.com
@@ -20,7 +20,7 @@
                 1. 15分钟
             > 参数列表:
                 1. 1 12 20 66 6
-****************************************************************************************/
+*******************************************************************************/
 
 Params
     Numeric RiskRatio(1);               //风险率(1-100),也就是资金使用率
@@ -63,8 +63,10 @@ Begin
     ATR = Average(TrueRange, ATRLen);
     N = ATR[1];
     TotalEquity = Portfolio_CurrentCapital();   //获得当前的可用资金，已考虑交易费用
-    TradeUnits = IntPart((TotalEquity * RiskRatio / 100) / (N * ContractUnit() * BigPointValue()));
-                                                           /*当前商品每张合约包含的基本单位数量*//*当前商品一个整数点的价值*/
+    TradeUnits = IntPart((TotalEquity * RiskRatio / 100)
+                                    /
+                (N * ContractUnit() * BigPointValue()));
+            /*当前商品每张合约包含的基本单位数量*//*当前商品一个整数点的价值*/
 
     SDonchianH = Highest(High[1], ShortLen);    //短周期唐奇安通道上轨
     SDonchianL = Lowest(Low[1], ShortLen);      //短周期唐奇安通道下轨
