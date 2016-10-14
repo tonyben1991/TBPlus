@@ -10,20 +10,23 @@
 Params
 
 Vars
+    String FileName;
 
 Begin
+    FileName = "E:\\Workspace\\TBPlus\\Log.txt";
     if (0 == BarStatus)
     {
-        FileDelete("E:\\Workspace\\TBPlusTest.txt");
+        FileDelete(FileName);
         Commentary(TimeToString(CurrentTime));  //打印策略开始回测时间
-        FileAppend("E:\\Workspace\\TBPlusTest.txt", TimeToString(CurrentTime));
-        FileAppend("E:\\Workspace\\TBPlusTest.txt", "");
+        FileAppend(FileName, TimeToString(CurrentTime));
+        FileAppend(FileName, "");
     }
 
     if (2 == BarStatus)
     {
         Commentary(TimeToString(CurrentTime));  //打印策略完成回测时间
-        FileAppend("E:\\Workspace\\TBPlusTest.txt", TimeToString(CurrentTime));
+        FileAppend(FileName, TimeToString(CurrentTime));
     }
+ int func(int a, int b, int c, )
 
 End
