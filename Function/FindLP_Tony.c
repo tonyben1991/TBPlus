@@ -8,7 +8,8 @@
 *******************************************************************************/
 
 Params
-    Numeric Length;         //传入的周期
+    Numeric BeginBarIndex;     //
+    Numeric EndBarIndex;
 
 Vars
     Numeric i;                  //循环计数
@@ -17,7 +18,7 @@ Vars
 
 Begin
     NumericArrayInsert(IndexArr, 0, 0);
-    for i = 2 to Length
+    for i = CurrentBar - EndBarIndex to CurrentBar - BeginBarIndex
     {
         if (Min(Open[i], Close[i]) <= Min(Open[i - 1], Close[i - 1]) && Min(Open[i], Close[i]) <= Min(Open[i - 2], Close[i - 2])
             && Min(Open[i], Close[i]) <= Min(Open[i + 1], Close[i + 1]) && Min(Open[i], Close[i]) <= Min(Open[i + 2], Close[i + 2]))

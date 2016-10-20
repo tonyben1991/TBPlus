@@ -3,11 +3,13 @@
             > 作者: Tony Ben
             > 电子邮箱: tonyben1991@outlook.com
             > 创建时间:
+
             > 函数功能:
 *******************************************************************************/
 
 Params
-    Numeric Length;         //传入的周期
+    Numeric BeginBarIndex;     //
+    Numeric EndBarIndex;
 
 Vars
     Numeric i;                  //循环计数
@@ -15,7 +17,7 @@ Vars
     Numeric maxIndex;           //
 Begin
     NumericArrayInsert(IndexArr, 0, 0);
-    for i = 2 to Length
+    for i = CurrentBar - EndBarIndex to CurrentBar - BeginBarIndex
     {
         if (Max(Open[i], Close[i]) >= Max(Open[i - 1], Close[i - 1]) && Max(Open[i], Close[i]) >= Max(Open[i - 2], Close[i - 2])
             && Max(Open[i], Close[i]) >= Max(Open[i + 1], Close[i + 1]) && Max(Open[i], Close[i]) >= Max(Open[i + 2], Close[i + 2]))
