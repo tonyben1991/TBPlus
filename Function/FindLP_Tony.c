@@ -14,14 +14,18 @@ Params
 Vars
     Numeric i;                  //循环计数
     NumericArray IndexArr;      //保存满足条件的Bar距离当前Bar的距离
-    Numeric minIndex;           //保存最的最低底部的Bar距离当前Bar的距离
+    Numeric minIndex(0);           //保存最的最低底部的Bar距离当前Bar的距离
 
 Begin
     NumericArrayInsert(IndexArr, 0, 0);
+
     for i = CurrentBar - EndBarIndex to CurrentBar - BeginBarIndex
     {
-        if (Min(Open[i], Close[i]) <= Min(Open[i - 1], Close[i - 1]) && Min(Open[i], Close[i]) <= Min(Open[i - 2], Close[i - 2])
-            && Min(Open[i], Close[i]) <= Min(Open[i + 1], Close[i + 1]) && Min(Open[i], Close[i]) <= Min(Open[i + 2], Close[i + 2]))
+        if (i > 4 &&
+            Min(Open[i], Close[i]) <= Min(Open[i - 1], Close[i - 1]) && Min(Open[i], Close[i]) <= Min(Open[i - 2], Close[i - 2])
+                && Min(Open[i], Close[i]) <= Min(Open[i - 3], Close[i - 3]) && Min(Open[i], Close[i]) <= Min(Open[i - 4], Close[i - 4])
+            && Min(Open[i], Close[i]) <= Min(Open[i + 1], Close[i + 1]) && Min(Open[i], Close[i]) <= Min(Open[i + 2], Close[i + 2])
+                && Min(Open[i], Close[i]) <= Min(Open[i + 3], Close[i + 3]) && Min(Open[i], Close[i]) <= Min(Open[i + 4], Close[i + 4]))
         {
             NumericArrayInsert(IndexArr, GetNumericArraySize(IndexArr) - 1, CurrentBar - i);
         }

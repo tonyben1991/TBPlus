@@ -14,17 +14,21 @@ Vars
     NumericArray arr;                           //高点的索引组成的数组
     Numeric i;
     Numeric j;
-    
+
 Begin
     Pandora_getHighPoints(arr, s_index);
-    
+
     //遍历高点的索引组成的数组
-    if(GetNumericArraySize(arr) > 0) {
+    if(GetNumericArraySize(arr) > 0)
+    {
         arr_line[0] = 0;
-        for i = 0 to GetNumericArraySize(arr) - 1 {
-            for j = i + 1 to GetNumericArraySize(arr) - 1 {
+        for i = 0 to GetNumericArraySize(arr) - 1
+        {
+            for j = i + 1 to GetNumericArraySize(arr) - 1
+            {
                 //距离小于10根k的也剔除掉
-                if(arr[j] - arr[i] > 10) {
+                if(arr[j] - arr[i] > 10)
+                {
                     NumericArrayInsert(arr_line, GetNumericArraySize(arr_line) - 1, arr[i]);
                     NumericArrayInsert(arr_line, GetNumericArraySize(arr_line) - 1, arr[j]);
                 }

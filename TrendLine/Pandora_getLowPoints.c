@@ -21,13 +21,15 @@ Vars
     Bool cond_2;                            //倒数第2根满足低点定义
     Bool cond_1;                            //倒数第1根满足低点定义
     Numeric cond_n;                         //5个条件里哪一个满足
-    
+
 Begin
     //获取低点的索引组成的数组，因为在实盘中不能使用未来函数索引不能为负值，此时只能从1到9
-    if(CurrentBar >= s_index) {
+    if(CurrentBar >= s_index)
+    {
         //先找出整个区域最最低点
         arr_temp[0] = 0;
-        for i = CurrentBar - s_index - 5 downto 0 {
+        for i = CurrentBar - s_index - 5 downto 0
+        {
             cond_5                //最近5根之前
             = Min(o[i + 5], c[i + 5]) <= Min(o[i + 9], c[i + 9])
             && Min(o[i + 5], c[i + 5]) <= Min(o[i + 8], c[i + 8])
@@ -83,26 +85,30 @@ Begin
             && Min(o[i + 1], c[i + 1]) <= Min(o[i + 2], c[i + 2]);*/
 
             /*if(cond_5 || cond_4 || cond_3 || cond_2 || cond_1) {*/
-            if(cond_5 || cond_4 || cond_3) {
-                if(cond_5) {
+            if(cond_5 || cond_4 || cond_3)
+            {
+                if(cond_5)
+                {
                     cond_n = 5;
-                } else if(cond_4) {
+                }
+                else if(cond_4)
+                {
                     cond_n = 4;
-                } else if(cond_3) {
+                }
+                else if(cond_3)
+                {
                     cond_n = 3;
                 }/* else if(cond_2) {
                     cond_n = 2;
                 } else if(cond_1) {
                     cond_n = 1;
                 }*/
-                
+
                 NumericArrayInsert(arr_temp, GetNumericArraySize(arr_temp) - 1, CurrentBar - i - cond_n);
 
-                if(
-                    real_low <= 0
-                    ||
-                    (real_low > 0 && Min(o[i + cond_n], c[i + cond_n]) < real_low)
-                ) {
+                if(real_low <= 0
+                    || (real_low > 0 && Min(o[i + cond_n], c[i + cond_n]) < real_low)) 
+                {
                     real_low = Min(o[i + cond_n], c[i + cond_n]);
                     real_low_index = GetNumericArraySize(arr_temp) - 2;
                 }
@@ -113,6 +119,6 @@ Begin
         //只取最最低点右侧的那些低点
         NumericArrayInsertRange(arr, 0, arr_temp, real_low_index, GetNumericArraySize(arr_temp) - real_low_index);
     }
-    
+
     return true;
 End

@@ -48,6 +48,12 @@ Begin
         return False;
     }
 
+    Flag = HighestBarIndex + SecHighestBarIndex + LowestBarIndex + SecLowestBarIndex;
+    if (Flag[1] == Flag)
+    {
+        return False;
+    }
+
     if (Max(Close[CurrentBar - SecHighestBarIndex], Open[CurrentBar - SecHighestBarIndex])
       > Min(Close[CurrentBar - SecLowestBarIndex], Open[CurrentBar - SecLowestBarIndex]))     //如果次高点大于次低点
     {

@@ -21,13 +21,15 @@ Vars
     Bool cond_2;                            //倒数第2根满足高点定义
     Bool cond_1;                            //倒数第1根满足高点定义
     Numeric cond_n;                         //5个条件里哪一个满足
-    
-Begin    
+
+Begin
     //获取高点的索引组成的数组，因为在实盘中不能使用未来函数索引不能为负值，此时只能从1到9
-    if(CurrentBar >= s_index) {
+    if(CurrentBar >= s_index)
+    {
         //先找出整个区域最最高点
         arr_temp[0] = 0;
-        for i = CurrentBar - s_index - 5 downto 0 {
+        for i = CurrentBar - s_index - 5 downto 0
+        {
             cond_5                //最近5根之前
             = Max(o[i + 5], c[i + 5]) >= Max(o[i + 9], c[i + 9])
             && Max(o[i + 5], c[i + 5]) >= Max(o[i + 8], c[i + 8])
@@ -95,14 +97,12 @@ Begin
                 } else if(cond_1) {
                     cond_n = 1;
                 }*/
-                
+
                 NumericArrayInsert(arr_temp, GetNumericArraySize(arr_temp) - 1, CurrentBar - i - cond_n);
 
-                if(
-                    real_high <= 0
-                    ||
-                    (real_high > 0 && Max(o[i + cond_n], c[i + cond_n]) > real_high)
-                ) {
+                if(real_high <= 0
+                    || (real_high > 0 && Max(o[i + cond_n], c[i + cond_n]) > real_high))
+                {
                     real_high = Max(o[i + cond_n], c[i + cond_n]);
                     real_high_index = GetNumericArraySize(arr_temp) - 2;
                 }
