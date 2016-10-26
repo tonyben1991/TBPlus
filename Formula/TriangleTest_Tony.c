@@ -1,31 +1,29 @@
+/*******************************************************************************
+            > 文件:TriangleTest_Tony
+            > 作者: Tony Ben
+            > 电子邮箱: tonyben1991@outlook.com
+            > 创建时间: 2016-10-26
+
+            > 策略原理:
+                1.三角形形态识别函数测试
+            > 测试品种:
+                1.通用
+            > 适用周期:
+                1.通用
+            > 参数列表:
+                1.
+*******************************************************************************/
+
 Params
-    Numeric Length(200);        //判断周期长短
-    Numeric Ratio(2);           //控制三角形形态
+    Numeric Length(100);        //判断周期长短
+
 Vars
-    NumericArray HighLine;
-    NumericArray LowLine;
-    StringSeries LastFourPoint;     //记录前一个三角形的四个点
+
 
 Begin
-    Pandora_getHighTrendLine(HighLine, CurrentBar - Length);
-    Pandora_getLowTrendLine(LowLine, CurrentBar - Length);
-
-    Commentary("High Line:" + Text(HighLine[0]) + " " + Text(HighLine[1]));
-    Commentary("Low Line:" + Text(LowLine[0]) + " " + Text(LowLine[1]));
-
-    if (0 != HighLine[0] * HighLine[1] * LowLine[0] * LowLine[1])       //排除没找到去实现的的情况
+    if (Triangle_Tony(Length))
     {
-        //if ((HighLine[0] < LowLine[0] && LowLine[0] < HighLine[1] && HighLine[1] < LowLine[1]) || (LowLine[0] < HighLine[0] && HighLine[0] < LowLine[1] && LowLine[1] < HighLine[1]))
-        {
-            if (Abs(HighLine[0] - LowLine[0]) < Abs(HighLine[1] - LowLine[1]) * Ratio)
-            {
-                LastFourPoint = Text(HighLine[0]) + Text(HighLine[1]) + Text(LowLine[0]) + Text(LowLine[1]);
-                if (LastFourPoint[1] != LastFourPoint)
-                {
-                    PlotBool("T", True);
-                }
-            }
-        }
+        PlotBool("T", True);
     }
 
 End

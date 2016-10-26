@@ -2,64 +2,80 @@
             > 文件: Triangle_Tony
             > 作者: Tony Ben
             > 电子邮箱: tonyben1991@outlook.com
-            > 创建时间:
+            > 创建时间:2016-10-21
 
             > 函数功能: 识别三角形
 *******************************************************************************/
 
 Params
-    Numeric BeginBarIndex;     //
-    Numeric EndBarIndex;
+    Numeric Length(100);            //判断周期的长短
 
 Vars
-    Numeric HighestBarIndex;        //最该点索引
-    Numeric SecHighestBarIndex;     //次高点索引
-    Numeric LowestBarIndex;         //最低点索引
-    Numeric SecLowestBarIndex;      //次低点索引
-    NumericSeries Flag(0);          //前一个三角形的起点,用来过滤同一个三角形
+    Numeric Ratio(2);               //控制三角形形态
+    NumericArray HighLine;          //趋势线上轨
+    NumericArray LowLine;           //趋势线下轨
+    StringSeries LastFourPoints;    //记录前一个三角形的四个点
+    String FourPoints;              //记录当前三角形的四个点
+    Bool Flag(False);               //三角形是否成立的标志
 
 Begin
-    HighestBarIndex = InvalidNumeric;
-    SecHighestBarIndex = InvalidNumeric;
-    LowestBarIndex = InvalidNumeric;
-    SecLowestBarIndex = InvalidNumeric;
+    Pandora_getHighTrendLine(HighLine, CurrentBar - Length);
+    Pandora_getLowTrendLine(LowLine, CurrentBar - Length);
 
-    HighestBarIndex = FindHP_Tony(BeginBarIndex, EndBarIndex);
-    LowestBarIndex = FindLP_Tony(BeginBarIndex, EndBarIndex);
+    //Commentary("High Line:" + Text(HighLine[0]) + " " + Text(HighLine[1]));
+    //Commentary("Low Line:" + Text(LowLine[0]) + " " + Text(LowLine[1]));
 
-    if (0 == HighestBarIndex || 0 == LowestBarIndex)
+    if (0 != HighLine[0] * HighLine[1] * LowLine[0] * LowLine[1])       //排除没找到趋势线的情况
     {
-        return False;
+        if ((HighLine[0] < LowLine[0] && LowLine[0] < HighLine[1] && HighLine[1] < LowLine[1])
+        || (LowLine[0] < HighLine[0] && HighLine[0] < LowLine[1] && LowLine[1] < HighLine[1]))  //
+        {
+            if ((Abs(HighLine[0] - LowLine[0]) < Abs(HighLine[1] - LowLine[1]) * Ratio
+                && Abs(HighLine[0] - LowLine[0]) < Min(Abs(LowLine[0] - HighLine[1]), Abs(HighLine[0] - LowLine[1])) * Ratio
+                && Min(Abs(LowLine[0] - HighLine[1]), Abs(HighLine[0] - LowLine[1])) < Abs(HighLine[1] - LowLine[1]) * Ratio)
+            && (Abs(HighLine[0] - LowLine[0]) > Abs(HighLine[1] - LowLine[1]) / Ratio
+                && Abs(HighLine[0] - LowLine[0]) > Min(Abs(LowLine[0] - HighLine[1]), Abs(HighLine[0] - LowLine[1])) / Ratio
+                && Min(Abs(LowLine[0] - HighLine[1]), Abs(HighLine[0] - LowLine[1])) > Abs(HighLine[1] - LowLine[1]) / Ratio))
+            {
+                Flag = True;
+            }
+        }
+
+        else if (HighLine[1] < LowLine[0] || LowLine[1] < HighLine[0])
+        {
+            if ((HighLine[1] - HighLine[0] > Min(Abs(HighLine[1] - HighLine[0]), Abs(LowLine[1] - HighLine[0])) / Ratio
+                && LowLine[1] - LowLine[0] > Min(Abs(HighLine[1] - HighLine[0]), Abs(LowLine[1] - HighLine[0])) / Ratio)
+            && ())
+            {
+                if ()
+                {
+                    Flag = True;
+                }
+            }
+        }
+        else    //(HighLine[0] < LowLine[0] && LowLine[1] < HighLine[1]) || (LowLine[0] < HighLine[0] && HighLine[1] < LowLine[1])
+        {
+            if (Min(LowLine[1] - LowLine[0], HighLine[1] - HighLine[0]) > Abs(HighLine[0] - LowLine[0]) / 2
+            && Min(LowLine[1] - LowLine[0], HighLine[1] - HighLine[0]) > Abs(HighLine[1] - LowLine[1]) / 2)
+            {
+                if ()
+                {
+                    Flag = True;
+                }
+            }
+        }
+
     }
 
-    if (HighestBarIndex < LowestBarIndex)
+    FourPoints = (Text(HighLine[0]) + " " + Text(HighLine[1]) + " " + Text(LowLine[0]) + " " + Text(LowLine[1]));
+    if (FourPoints == LastFourPoints)
     {
-        SecHighestBarIndex = FindHP_Tony(LowestBarIndex + 1, EndBarIndex); //在最高点之后找一个最高点,也就是次高点
-        SecLowestBarIndex = FindLP_Tony(SecHighestBarIndex + 1, EndBarIndex);   //在最低点之后找一个最低点,也就是次低点
+        Flag = False;
     }
-    else
-    {
-        SecLowestBarIndex = FindLP_Tony(HighestBarIndex + 1, EndBarIndex);   //在最低点之后找一个最低点,也就是次低点
-        SecHighestBarIndex = FindHP_Tony(SecLowestBarIndex + 1, EndBarIndex); //在最高点之后找一个最高点,也就是次高点
-    }
+    LastFourPoints = FourPoints;
 
-    if (0 == SecHighestBarIndex || 0 == SecLowestBarIndex)
-    {
-        return False;
-    }
+    //Commentary("CurrentBar:" + Text(CurrentBar));
 
-    Flag = HighestBarIndex + SecHighestBarIndex + LowestBarIndex + SecLowestBarIndex;
-    if (Flag[1] == Flag)
-    {
-        return False;
-    }
-
-    if (Max(Close[CurrentBar - SecHighestBarIndex], Open[CurrentBar - SecHighestBarIndex])
-      > Min(Close[CurrentBar - SecLowestBarIndex], Open[CurrentBar - SecLowestBarIndex]))     //如果次高点大于次低点
-    {
-        return True;
-    }
-
-    return False;
+    return Flag;
 
 End
