@@ -13,9 +13,9 @@ Params
     NumericArrayRef LowLine;        //趋势线下轨
 
 Vars
-    Numeric Ratio(2);               //控制三角形形态
+    Numeric Ratio(1.6);               //控制三角形形态
     Numeric RatioH(4);              //控制突破点
-    Numeric Filter(1);              //控制回调比例
+    Numeric Filter(67);              //控制回调比例
     Numeric TempHigh;
     Numeric TempLow;
     Numeric TempIndex;
@@ -30,16 +30,16 @@ Begin
         /**********************************************************************/
         if (HighLine[0] < LowLine[0] && LowLine[0] < HighLine[1] && HighLine[1] < LowLine[1])
         {
-            if (((LowLine[0] - HighLine[0]) / (LowLine[1] - LowLine[0])) < Ratio && ((HighLine[1] - LowLine[0]) / (LowLine[1] - HighLine[1])) < Ratio
-            && (((LowLine[3] - HighLine[3]) / (HighLine[2] - LowLine[2]) - HighLine[0]) / ((LowLine[3] - HighLine[3]) / (HighLine[2] - LowLine[2])- LowLine[1])) < RatioH)
+            if ((LowLine[0] - HighLine[0]) / (LowLine[1] - LowLine[0]) < Ratio && (HighLine[1] - LowLine[0]) / (LowLine[1] - HighLine[1]) < Ratio
+            && ((LowLine[3] - HighLine[3]) / (HighLine[2] - LowLine[2]) - HighLine[0]) / ((LowLine[3] - HighLine[3]) / (HighLine[2] - LowLine[2])- LowLine[1]) < RatioH)
             {
                 Flag = True;
             }
         }
         else if (LowLine[0] < HighLine[0] && HighLine[0] < LowLine[1] && LowLine[1] < HighLine[1])
         {
-            if (((HighLine[0] - LowLine[0]) / (HighLine[1] - HighLine[0])) < Ratio && ((LowLine[1] - HighLine[0]) / (HighLine[1] - LowLine[1])) < Ratio
-            && (((LowLine[3] - HighLine[3]) / (HighLine[2] - LowLine[2]) - LowLine[0]) / ((LowLine[3] - HighLine[3]) / (HighLine[2] - LowLine[2])- HighLine[1])) < RatioH)
+            if ((HighLine[0] - LowLine[0]) / (HighLine[1] - HighLine[0]) < Ratio && (LowLine[1] - HighLine[0]) / (HighLine[1] - LowLine[1]) < Ratio
+            && ((LowLine[3] - HighLine[3]) / (HighLine[2] - LowLine[2]) - LowLine[0]) / ((LowLine[3] - HighLine[3]) / (HighLine[2] - LowLine[2])- HighLine[1]) < RatioH)
             {
                 Flag = True;
             }
@@ -52,9 +52,9 @@ Begin
             TempIndex = HighestBetween_Tony(LowLine[0], LowLine[1]);
             TempHigh = HighLine[2] * TempIndex + HighLine[3];
             TempLow = LowLine[2] * TempIndex + LowLine[3];
-            if (((TempHigh- Max(Open[CurrentBar - TempIndex], Close[CurrentBar - TempIndex])) / (TempHigh - TempLow)) * 100 < Filter
-            && ((LowLine[0] - HighLine[0]) / (HighLine[1] - LowLine[0])) < Ratio
-            && (((LowLine[3] - HighLine[3]) / (HighLine[2] - LowLine[2]) - HighLine[0]) / ((LowLine[3] - HighLine[3]) / (HighLine[2] - LowLine[2])- HighLine[1])) < RatioH)
+            if ((Max(Open[CurrentBar - TempIndex], Close[CurrentBar - TempIndex]) - TempLow) / (TempHigh - TempLow) * 100 > Filter
+            && (LowLine[0] - HighLine[0]) / (HighLine[1] - LowLine[0]) < Ratio
+            && ((LowLine[3] - HighLine[3]) / (HighLine[2] - LowLine[2]) - HighLine[0]) / ((LowLine[3] - HighLine[3]) / (HighLine[2] - LowLine[2])- HighLine[1]) < RatioH)
             {
                 Flag = True;
             }
@@ -68,8 +68,8 @@ Begin
             TempIndex = LowestBetween_Tony(HighLine[0], HighLine[1]);
             TempHigh = HighLine[2] * TempIndex + HighLine[3];
             TempLow = LowLine[2] * TempIndex + LowLine[3];
-            if ((Min(Open[CurrentBar - TempIndex], Close[CurrentBar - TempIndex]) - TempLow) / (TempHigh - TempLow) * 100 < Filter
-            && ((HighLine[0] - LowLine[0]) / (LowLine[1] - HighLine[0])) < Ratio
+            if ((TempHigh - Min(Open[CurrentBar - TempIndex], Close[CurrentBar - TempIndex])) / (TempHigh - TempLow) * 100 > Filter
+            && (HighLine[0] - LowLine[0]) / (LowLine[1] - HighLine[0]) < Ratio
             && ((LowLine[3] - HighLine[3]) / (HighLine[2] - LowLine[2]) - LowLine[0]) / ((LowLine[3] - HighLine[3]) / (HighLine[2] - LowLine[2])- LowLine[1]) < RatioH)
             {
                 Flag = True;
@@ -87,10 +87,10 @@ Begin
             TempIndex = LowestBetween_Tony(HighLine[0], HighLine[1]);
             TempHigh = HighLine[2] * TempIndex + HighLine[3];
             TempLow = LowLine[2] * TempIndex + LowLine[3];
-            if ((Min(Open[CurrentBar - TempIndex], Close[CurrentBar - TempIndex]) - TempLow) / (TempHigh - TempLow) * 100 < Filter
+            if ((TempHigh - Min(Open[CurrentBar - TempIndex], Close[CurrentBar - TempIndex])) / (TempHigh - TempLow) * 100 > Filter
             && ((LowLine[3] - HighLine[3]) / (HighLine[2] - LowLine[2]) - HighLine[0]) / ((LowLine[3] - HighLine[3]) / (HighLine[2] - LowLine[2])- LowLine[1]) < RatioH)
             {
-                Flag = True;
+                    Flag = True;
             }
             else if (Min(Open[CurrentBar - TempIndex], Close[CurrentBar - TempIndex]) < Min(Open[CurrentBar - LowLine[0]], Close[CurrentBar - LowLine[0]]))
             {
@@ -106,10 +106,10 @@ Begin
             TempIndex = HighestBetween_Tony(LowLine[0], LowLine[1]);
             TempHigh = HighLine[2] * TempIndex + HighLine[3];
             TempLow = LowLine[2] * TempIndex + LowLine[3];
-            if ((TempHigh - Max(Open[CurrentBar - TempIndex], Close[CurrentBar - TempIndex])) / (TempHigh - TempLow) * 100 < Filter
+            if ((Max(Open[CurrentBar - TempIndex], Close[CurrentBar - TempIndex]) - TempLow) / (TempHigh - TempLow) * 100 > Filter
             && ((LowLine[3] - HighLine[3]) / (HighLine[2] - LowLine[2]) - LowLine[0]) / ((LowLine[3] - HighLine[3]) / (HighLine[2] - LowLine[2])- HighLine[1]) < RatioH)
             {
-                Flag = True;
+                    Flag = True;
             }
             else if (Max(Open[CurrentBar - TempIndex], Close[CurrentBar - TempIndex]) > Max(Open[CurrentBar - HighLine[0]], Close[CurrentBar - HighLine[0]]))
             {
@@ -123,6 +123,7 @@ Begin
         /**********************************************************************/
     }
 
+    //Commentary("Cross Point:" + Text((LowLine[3] - HighLine[3]) / (HighLine[2] - LowLine[2])));
     //Commentary("High Line:" + Text(HighLine[0]) + " " + Text(HighLine[1]));
     //Commentary("Low Line:" + Text(LowLine[0]) + " " + Text(LowLine[1]));
     //Commentary("CurrentBar:" + Text(CurrentBar));

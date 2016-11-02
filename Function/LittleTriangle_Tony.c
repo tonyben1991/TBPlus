@@ -13,7 +13,7 @@ Params
     NumericArrayRef LowLine;        //趋势线下轨
 
 Vars
-    Numeric Ratio(2);               //控制三角形形态
+    Numeric Ratio(1.6);               //控制三角形形态
     Numeric RatioH(4);
     Bool Flag(False);               //三角形是否成立的标志
 
@@ -26,16 +26,16 @@ Begin
         /**********************************************************************/
         if (HighLine[0] < LowLine[0] && LowLine[0] < HighLine[1] && HighLine[1] < LowLine[1])
         {
-            if (((LowLine[0] - HighLine[0]) / (LowLine[1] - LowLine[0])) < Ratio && ((HighLine[1] - LowLine[0]) / (LowLine[1] - HighLine[1])) < Ratio
-            && (((LowLine[3] - HighLine[3]) / (HighLine[2] - LowLine[2]) - HighLine[0]) / ((LowLine[3] - HighLine[3]) / (HighLine[2] - LowLine[2])- LowLine[1])) < RatioH)
+            if ((LowLine[0] - HighLine[0]) / (LowLine[1] - LowLine[0]) < Ratio && (HighLine[1] - LowLine[0]) / (LowLine[1] - HighLine[1]) < Ratio
+            && ((LowLine[3] - HighLine[3]) / (HighLine[2] - LowLine[2]) - HighLine[0]) / ((LowLine[3] - HighLine[3]) / (HighLine[2] - LowLine[2])- LowLine[1]) < RatioH)
             {
                 Flag = True;
             }
         }
         else if (LowLine[0] < HighLine[0] && HighLine[0] < LowLine[1] && LowLine[1] < HighLine[1])
         {
-            if (((HighLine[0] - LowLine[0]) / (HighLine[1] - HighLine[0])) < Ratio && ((LowLine[1] - HighLine[0]) / (HighLine[1] - LowLine[1])) < Ratio
-            && (((LowLine[3] - HighLine[3]) / (HighLine[2] - LowLine[2]) - LowLine[0]) / ((LowLine[3] - HighLine[3]) / (HighLine[2] - LowLine[2])- HighLine[1])) < RatioH)
+            if ((HighLine[0] - LowLine[0]) / (HighLine[1] - HighLine[0]) < Ratio && (LowLine[1] - HighLine[0]) / (HighLine[1] - LowLine[1]) < Ratio
+            && ((LowLine[3] - HighLine[3]) / (HighLine[2] - LowLine[2]) - LowLine[0]) / ((LowLine[3] - HighLine[3]) / (HighLine[2] - LowLine[2])- HighLine[1]) < RatioH)
             {
                 Flag = True;
             }

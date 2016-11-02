@@ -14,8 +14,8 @@ Vars
     NumericArray arr_lines;                     //获取最近区间内的高点构成的所有连线组合里，能让其他点都落在该连线同一侧的连线集合（索引构成）
     NumericArray arr_points;                    //高点的索引组成的数组
     NumericArray arr_distance_sum;              //其他所有高点到某根线的距离之和组成的数组
-    NumericSeries b;                                  //直线方程 y = kx + b 的纵截距b
-    NumericSeries k;                                  //直线方程 y = kx + b 的斜率k
+    Numeric b;                                  //直线方程 y = kx + b 的纵截距b
+    Numeric k;                                  //直线方程 y = kx + b 的斜率k
     Numeric i;
     Numeric j;
     Numeric proportionYX;                       //在图表上y轴与x轴的比值(看区域内当前品种的价格差与区域内k线数量的比值，为了接近肉眼观察到的图表距离，统一折算成x轴刻度)
@@ -26,7 +26,7 @@ Begin
     Pandora_getHighOneSideLines(arr_lines, s_index);
     Pandora_getHighPoints(arr_points, s_index);
 
-    proportionYX = IntPart((Highest(h[1], CurrentBar - arr_points[0] - 1) - Lowest(l[1], CurrentBar - arr_points[0] - 1)) / (CurrentBar - arr_points[0] - 1));
+    proportionYX = IntPart(Close[1]);
 
     //遍历高点的索引组成的数组
     if(GetNumericArraySize(arr_lines) > 0 && GetNumericArraySize(arr_points) > 0)
@@ -65,8 +65,8 @@ Begin
 
         arr_trend_lines[0] = arr_lines[temp_distance_min_index * 2];
         arr_trend_lines[1] = arr_lines[temp_distance_min_index * 2 + 1];
-        arr_trend_lines[2] = k[temp_distance_min_index] * proportionYX;
-        arr_trend_lines[3] = b[temp_distance_min_index] * proportionYX;
+        arr_trend_lines[2] = (Max(Open[CurrentBar - arr_trend_lines[0]], Close[CurrentBar - arr_trend_lines[0]]) - Max(Open[CurrentBar - arr_trend_lines[1]], Close[CurrentBar - arr_trend_lines[1]])) / (arr_trend_lines[0] - arr_trend_lines[1]);
+        arr_trend_lines[3] = Max(Open[CurrentBar - arr_trend_lines[0]], Close[CurrentBar - arr_trend_lines[0]]) - arr_trend_lines[0] * arr_trend_lines[2];
     }
 
     return true;
